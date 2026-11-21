@@ -259,7 +259,7 @@ ul.lista.loss li::before { background: #F2D3CB; }
 .close blockquote { margin: 0; font: 600 italic 58px/1.18 var(--f-display); max-width: 1250px; color: var(--ink); }
 .close blockquote em { color: var(--green); }
 .qa { margin-top: 46px; width: 280px; height: 280px; border-radius: 50%; background: var(--bg); box-shadow: var(--raise); display: grid; place-items: center; }
-.qa div { width: 220px; height: 220px; border-radius: 50%; box-shadow: var(--inset); display: grid; place-items: center; font: 800 40px/1.05 var(--f-display); color: var(--green); }
+.qa div { width: 220px; height: 220px; border-radius: 50%; box-shadow: var(--inset); display: grid; place-items: center; font: 800 38px/1.05 var(--f-display); color: var(--green); }
 
 /* ----------------------------------------------------------- tablas (anexos) */
 table.t { width: 100%; border-collapse: separate; border-spacing: 0 8px; font: 500 17px/1.35 var(--f-ui); }

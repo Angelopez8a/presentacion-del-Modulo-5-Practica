@@ -58,8 +58,42 @@
   construirPersonas();
   construirTablaK();
 
+  // ------------------------------------------------------------ tema vivo: fondos de color por acto
+  const FONDOS = {
+    "t-portada": "radial-gradient(700px 520px at 88% 18%, rgba(19,181,138,.36), transparent 62%), radial-gradient(640px 480px at 72% 96%, rgba(91,69,176,.24), transparent 62%), radial-gradient(560px 460px at 4% 6%, rgba(242,165,65,.28), transparent 60%), radial-gradient(520px 420px at 28% 104%, rgba(44,156,201,.20), transparent 60%), linear-gradient(#EEF4F0, #EEF4F0)",
+    "t-1": "radial-gradient(760px 520px at 98% 0%, rgba(19,181,138,.30), transparent 62%), radial-gradient(640px 520px at 0% 100%, rgba(242,165,65,.20), transparent 60%), linear-gradient(#E3F0E8, #E3F0E8)",
+    "t-2": "radial-gradient(760px 520px at 98% 0%, rgba(91,69,176,.24), transparent 62%), radial-gradient(640px 520px at 0% 100%, rgba(44,156,201,.20), transparent 60%), linear-gradient(#ECEAF6, #ECEAF6)",
+    "t-3": "radial-gradient(760px 520px at 98% 0%, rgba(226,85,59,.20), transparent 62%), radial-gradient(640px 520px at 0% 100%, rgba(242,165,65,.26), transparent 60%), linear-gradient(#F6EDE6, #F6EDE6)",
+    "t-4": "radial-gradient(760px 520px at 98% 0%, rgba(217,162,27,.26), transparent 62%), radial-gradient(640px 520px at 0% 100%, rgba(19,181,138,.22), transparent 60%), linear-gradient(#EEF2E3, #EEF2E3)",
+    "t-a": "radial-gradient(700px 500px at 100% 0%, rgba(63,90,107,.14), transparent 60%), linear-gradient(#E8ECEF, #E8ECEF)",
+    "t-cierre": "radial-gradient(700px 500px at 92% 8%, rgba(19,181,138,.22), transparent 60%), radial-gradient(640px 480px at 6% 94%, rgba(242,165,65,.20), transparent 60%), linear-gradient(#E9F0EC, #E9F0EC)",
+    "t-sep1": "radial-gradient(900px 700px at 86% 50%, rgba(123,211,137,.45), transparent 60%), linear-gradient(135deg, #004D33 0%, #00704A 45%, #0E9F6E 100%)",
+    "t-sep2": "radial-gradient(900px 700px at 86% 50%, rgba(44,156,201,.50), transparent 60%), linear-gradient(135deg, #2A1F66 0%, #5B45B0 50%, #3A7BC8 100%)",
+    "t-sep3": "radial-gradient(900px 700px at 86% 50%, rgba(242,165,65,.55), transparent 60%), linear-gradient(135deg, #8E2F1C 0%, #D2532F 50%, #EE8A3C 100%)",
+    "t-sep4": "radial-gradient(900px 700px at 86% 50%, rgba(217,162,27,.55), transparent 60%), linear-gradient(135deg, #0B3D2E 0%, #00704A 55%, #3E9B4F 100%)",
+    "t-sepA": "radial-gradient(800px 600px at 86% 50%, rgba(19,181,138,.22), transparent 60%), linear-gradient(135deg, #22313A 0%, #3F5A6B 100%)"
+  };
+  function aplicarFondos() {
+    const vivo = document.documentElement.classList.contains("vivo");
+    document.querySelectorAll(".reveal .slides > section").forEach(sec => {
+      const t = [...sec.classList].find(c => c.startsWith("t-"));
+      if (vivo && FONDOS[t]) sec.setAttribute("data-background-gradient", FONDOS[t]);
+      else sec.removeAttribute("data-background-gradient");
+    });
+  }
+  function cambiarTema() {
+    const vivo = document.documentElement.classList.toggle("vivo");
+    try { localStorage.setItem("tema", vivo ? "vivo" : "suave"); } catch (e) { /* sin almacenamiento */ }
+    aplicarFondos();
+    Reveal.sync();
+    const s = Reveal.getCurrentSlide();
+    if (s) graficas(s, false);
+  }
+  aplicarFondos();
+
   // ------------------------------------------------------------ Reveal
   Reveal.initialize({
+    keyboard: { 84: () => cambiarTema() },
     hash: true,
     width: 1600,
     height: 900,
@@ -183,6 +217,7 @@
   document.getElementById("nav-prev").onclick = () => Reveal.prev();
   document.getElementById("nav-next").onclick = () => Reveal.next();
   document.getElementById("nav-over").onclick = () => Reveal.toggleOverview();
+  document.getElementById("nav-tema").onclick = () => cambiarTema();
   document.getElementById("nav-full").onclick = () => {
     if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
     else document.exitFullscreen?.();
@@ -196,7 +231,8 @@
   const $ = id => document.getElementById(id);
 
   function calcular() {
-    const p = Math.max(est.redes / 100, p0);
+    // el control va de 60 % (situación actual = p0) a 100 %
+    const p = p0 + ((est.redes - 60) / 40) * (1 - p0);
     const extra = S.ofertasSinRedes * ((p - p0) / (1 - p0)) * (S.vistaRedes - S.vistaSinRedes);
     const tasa = p * S.vistaRedes + (1 - p) * S.vistaSinRedes;
     return {
