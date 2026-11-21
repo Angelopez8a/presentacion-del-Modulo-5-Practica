@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cada cliente, su oferta</title>
+<meta name="description" content="Práctica 4 · Storytelling de datos: segmentación de clientes y efectividad de campañas de Starbucks para la Dirección de Marketing.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/vivo.css">
+<script>
+  // Tema por defecto: vivo. ?tema=suave|vivo lo fuerza; la última elección se recuerda en este navegador.
+  (function () {
+    var q = (location.search.match(/tema=(vivo|suave)/) || [])[1], t = q;
+    if (!t) { try { t = localStorage.getItem("tema"); } catch (e) {} }
+    if (t !== "suave") document.documentElement.classList.add("vivo");
+  })();
+</script>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ================================================================ 1 · PORTADA -->
+<section class="t-portada cover" data-title="Portada">
+  <div class="s">
+    <div class="cover-grid">
+      <div>
+        <div class="kicker" data-a><span class="dot"></span>Diplomado en Ciencia de Datos · Módulo 5 · Práctica 4</div>
+        <h1 data-a>Cada cliente,<br><em>su oferta</em></h1>
+        <p class="tag" data-a>Segmentación de clientes y efectividad de campañas: propuesta para la Dirección de Marketing de Starbucks</p>
+        <!-- EQUIPO · escriban aquí los nombres completos de los 3 integrantes -->
+        <div class="team" data-a>
+          <div class="member"><div class="av">GE</div><span>Gael Escartin Salva</span></div>
+          <div class="member"><div class="av">MR</div><span>Mauricio Azael Robles Yasumura</span></div>
+          <div class="member"><div class="av">ÁL</div><span>Ángel Alejandro López Ochoa</span></div>
+        </div>
+        <div class="cover-meta" data-a><span class="pill">Noviembre 2026</span><span class="pill">17,000 clientes · 30 días de campaña</span></div>
+      </div>
+      <div class="device" data-a>
+        <div class="screen"><video src="media/Portada.mp4" data-poster="media/Portada.png" muted playsinline preload="auto"></video></div>
+        <p class="cap">Cada punto es un cliente: así se reúnen en grupos según cómo compran y cómo responden a las ofertas.</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Presentar al equipo. Mensaje de entrada: tenemos 17,000 clientes y 30 días de campaña; hoy les contamos quiénes son, cómo se agrupan, qué funcionó y qué haríamos distinto.</aside>
+</section>
+
+<!-- ================================================================ 2 · RESUMEN -->
+<section class="t-1" data-title="Resumen">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>Resumen ejecutivo</div>
+      <h2 data-a>La historia en 30 segundos</h2>
+      <p class="sub" data-a>Si solo leen una lámina, que sea esta</p>
+    </header>
+    <div class="grid3 grow" style="margin-bottom:26px;max-height:470px">
+      <div class="card msg" data-a>
+        <div class="n">1</div>
+        <div class="big">2 a 3.5×</div>
+        <h3>Las ofertas sí venden</h3>
+        <p>Con una oferta activa, el cliente gasta de 2 a 3.5 veces más por día. Las ventas suben después de cada envío.</p>
+      </div>
+      <div class="card msg" data-a>
+        <div class="n">2</div>
+        <div class="big loss"><span data-count="30">30</span> %</div>
+        <h3>Pero se mandó lo mismo a todos</h3>
+        <p>Todos los segmentos recibieron las mismas ofertas, y 3 de cada 10 dólares de recompensa (<b>$48 mil</b>) se pagaron a quien nunca vio la oferta.</p>
+      </div>
+      <div class="card msg" data-a>
+        <div class="n">3</div>
+        <div class="big"><span data-count="6">6</span>× menos</div>
+        <h3>La oferta correcta cuesta menos</h3>
+        <p>Mandar a cada segmento lo que le funciona, siempre por redes sociales: una respuesta puede costar hasta 6 veces menos.</p>
+      </div>
+    </div>
+    <div class="agenda" data-a>
+      <span class="pill">01 · El punto de partida</span>
+      <span class="pill">02 · Quiénes son nuestros clientes</span>
+      <span class="pill">03 · ¿Funcionaron las campañas?</span>
+      <span class="pill">04 · El plan</span>
+      <span class="pill in">Anexos técnicos</span>
+    </div>
+    <footer class="ft">Fuente: campaña de ofertas de la app de recompensas Starbucks · 30 días · 17,000 clientes</footer>
+  </div>
+  <aside class="notes">Tres mensajes: (1) las ofertas funcionan, (2) se desperdició dinero por no segmentar, (3) hay un plan concreto. El resto de la presentación es la evidencia.</aside>
+</section>
+
+<!-- ================================================================ 3 · SEPARADOR I -->
+<section class="t-sep1 sep" data-transition="zoom-in fade-out" data-title="Acto 1">
+  <div class="s">
+    <div class="sep-num">01</div>
+    <div class="act" data-a>Introducción</div>
+    <h2 data-a>El punto de partida</h2>
+    <p data-a>Qué pasó en 30 días de campaña y quiénes son nuestros clientes</p>
+    <div class="sep-map" data-a><span class="on">01 Punto de partida</span><span>02 Clientes</span><span>03 Campañas</span><span>04 El plan</span></div>
+  </div>
+</section>
+
+<!-- ================================================================ 4 · CIFRAS -->
+<section class="t-1" data-title="La campaña en cifras">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>01 · El punto de partida</div>
+      <h2 data-a>Una campaña de 30 días que llegó a toda la base</h2>
+      <p class="sub" data-a>Seis envíos de ofertas a 17,000 miembros de la app de recompensas</p>
+    </header>
+    <div class="kpis">
+      <div class="card" data-a><div class="big" data-count="17000">17,000</div><div class="lbl">clientes analizados<small>todos recibieron al menos una oferta</small></div></div>
+      <div class="card" data-a><div class="big" data-count="76277">76,277</div><div class="lbl">ofertas enviadas<small>en 6 envíos: días 0, 7, 14, 17, 21 y 24</small></div></div>
+      <div class="card" data-a><div class="big" data-count="138953">138,953</div><div class="lbl">compras<small>ticket típico (mediana): $9</small></div></div>
+      <div class="card" data-a><div class="big">$<span data-count="1.78" data-dec="2">1.78</span> M</div><div class="lbl">en ventas<small>en los 30 días de campaña</small></div></div>
+      <div class="card" data-a><div class="big amber">$<span data-count="162">162</span> mil</div><div class="lbl">pagados en recompensas<small>equivalen al 9 % de las ventas</small></div></div>
+      <div class="card" data-a><div class="big ink" data-count="10">10</div><div class="lbl">ofertas distintas<small>4 de 2x1, 4 descuentos y 2 informativas</small></div></div>
+    </div>
+    <div class="well timeline" data-a style="height:118px;padding:10px 26px"><div class="chart" data-chart="timeline"></div></div>
+    <footer class="ft">Fuente: campaña de ofertas de la app de recompensas Starbucks · 30 días · 17,000 clientes</footer>
+  </div>
+  <aside class="notes">Contexto rápido. 2x1 = el cliente recibe un producto igual gratis; descuento = $ de descuento al llegar a un gasto mínimo; informativa = solo comunica, sin recompensa.</aside>
+</section>
+
+<!-- ================================================================ 5 · VENTAS DIARIAS -->
+<section class="t-1" data-title="Ventas diarias">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>01 · El punto de partida</div>
+      <h2 data-a>Cada envío de ofertas empuja las ventas hacia arriba</h2>
+      <p class="sub" data-a>Ventas por día durante la campaña; las líneas punteadas marcan los 6 envíos</p>
+    </header>
+    <div class="row grow">
+      <div class="screen" data-a style="width:1010px;flex:none;align-self:flex-start">
+        <video src="media/VentasDiarias.mp4" data-poster="media/VentasDiarias.png" muted playsinline preload="auto"></video>
+        <button class="replay" aria-label="Repetir animación"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg></button>
+      </div>
+      <div class="col grow">
+        <div class="card" data-a><div class="big">+<span data-count="54">54</span> %</div><div class="lbl">ventas diarias en la última semana frente a la primera<small>de $47 mil a $72 mil por día</small></div></div>
+        <div class="card" data-a><div class="big">2 a 3.5×</div><div class="lbl">gasto diario por cliente mientras tiene una oferta vista y vigente<small>señal fuerte, no prueba: no hubo grupo de control</small></div></div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: campaña de ofertas Starbucks · ventas diarias en miles de USD</footer>
+  </div>
+  <aside class="notes">Patrón de dientes de sierra: sube tras cada envío y luego baja. Cuando los envíos se acercan (días 14 a 24) las ventas ya no regresan al piso. Aclarar que sin grupo de control no podemos atribuir el 100 % del aumento a las ofertas.</aside>
+</section>
+
+<!-- ================================================================ 6 · PERFIL -->
+<section class="t-1" data-title="Perfil del cliente">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>01 · El punto de partida</div>
+      <h2 data-a>Una base adulta y reciente, donde el ingreso define el ticket</h2>
+      <p class="sub" data-a>Clientes con perfil completo (14,825); 1 de cada 8 no tiene datos demográficos</p>
+    </header>
+    <div class="row grow">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;width:640px;flex:none;align-content:start">
+        <div class="card" data-a><div class="big md"><span data-count="55">55</span> años</div><div class="lbl">edad mediana</div></div>
+        <div class="card" data-a><div class="big md">$<span data-count="64">64</span> mil</div><div class="lbl">ingreso anual mediano</div></div>
+        <div class="card" data-a><div class="big md"><span data-count="51">51</span> %</div><div class="lbl">se registró hace menos de un año</div></div>
+        <div class="card" data-a><div class="big md amber"><span data-count="13">13</span> %</div><div class="lbl">sin edad, género ni ingreso</div></div>
+        <div class="card sm" data-a style="grid-column:1/3"><div class="lbl" style="margin:0">Las mujeres gastan <b class="g">41 % más al mes</b> que los hombres ($141 vs $100) con casi las mismas visitas.</div></div>
+      </div>
+      <div class="well grow col" data-a style="gap:6px;padding:24px 28px">
+        <div style="font:800 21px/1.2 var(--f-ui)">Ticket promedio por ingreso anual (USD)</div>
+        <div style="font:500 16px/1.3 var(--f-ui);color:var(--ink-3)">A más ingreso, vienen menos veces pero gastan hasta 5 veces más por visita</div>
+        <div class="chart grow" data-chart="ingreso"></div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: perfil de clientes de la app · ingreso anual declarado</footer>
+  </div>
+  <aside class="notes">El cliente típico tiene 55 años, no es un público joven. El ingreso no cambia cuántas veces vienen, cambia cuánto gastan por visita: de $6 a $30.</aside>
+</section>
+
+<!-- ================================================================ 7 · SEPARADOR II -->
+<section class="t-sep2 sep" data-transition="zoom-in fade-out" data-title="Acto 2">
+  <div class="s">
+    <div class="sep-num">02</div>
+    <div class="act" data-a>Nudo · parte 1</div>
+    <h2 data-a>Quiénes son nuestros clientes</h2>
+    <p data-a>Seis grupos con hábitos muy distintos y cómo cambian con el tiempo</p>
+    <div class="sep-map" data-a><span>01 Punto de partida</span><span class="on">02 Clientes</span><span>03 Campañas</span><span>04 El plan</span></div>
+  </div>
+</section>
+
+<!-- ================================================================ 8 · SEGMENTOS -->
+<section class="t-2" data-title="Seis segmentos">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>02 · Quiénes son nuestros clientes</div>
+      <h2 data-a>Nuestros clientes forman seis grupos muy distintos</h2>
+      <p class="sub" data-a>Los agrupamos según quiénes son y cómo compran; los 2,175 sin datos van aparte</p>
+    </header>
+    <div class="row grow">
+      <div class="screen" data-a style="width:1000px;flex:none;align-self:flex-start">
+        <video src="media/Segmentos.mp4" data-poster="media/Segmentos.png" muted playsinline preload="auto"></video>
+        <button class="replay" aria-label="Repetir animación"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg></button>
+      </div>
+      <div class="col grow" style="gap:12px" id="seg-list"></div>
+    </div>
+    <footer class="ft">Fuente: campaña de ofertas Starbucks · 17,000 clientes · % de clientes por grupo</footer>
+  </div>
+  <aside class="notes">La animación explica el método sin fórmulas: cada cliente se une al grupo más parecido y los centros se ajustan hasta estabilizarse. Detalle técnico en Anexos.</aside>
+</section>
+
+<!-- ================================================================ 9 · CONCENTRACIÓN -->
+<section class="t-2" data-title="Concentración de ventas">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>02 · Quiénes son nuestros clientes</div>
+      <h2 data-a>Uno de cada cuatro clientes genera la mitad de las ventas</h2>
+      <p class="sub" data-a>Participación de cada segmento en el número de clientes y en las ventas del mes</p>
+    </header>
+    <div class="row grow">
+      <div class="screen" data-a style="width:1010px;flex:none;align-self:flex-start">
+        <video src="media/Concentracion.mp4" data-poster="media/Concentracion.png" muted playsinline preload="auto"></video>
+        <button class="replay" aria-label="Repetir animación"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg></button>
+      </div>
+      <div class="col grow" style="gap:20px">
+        <div class="card sm" data-a><div class="big md"><span data-count="78">78</span> %</div><div class="lbl">de las ventas vienen de Promo-sensibles y Premium<small>que son el 48 % de los clientes</small></div></div>
+        <div class="card sm" data-a><div class="big md loss"><span data-count="7">7</span> %</div><div class="lbl">de las ventas vienen de Nuevos, Sin perfil e Inactivos<small>que son el 36 % de los clientes</small></div></div>
+        <div class="card sm" data-a><div class="big md ink"><span data-count="9">9</span>×</div><div class="lbl">gasta al mes un Promo-sensible frente a un Nuevo<small>$197 contra $22</small></div></div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: campaña de ofertas Starbucks · ventas de 30 días ($1.78 M)</footer>
+  </div>
+  <aside class="notes">Concentración tipo Pareto. Proteger a Promo-sensibles y Premium es proteger casi 4 de cada 5 dólares.</aside>
+</section>
+
+<!-- ================================================================ 10 · PERSONAS -->
+<section class="t-2" data-title="Personas">
+  <div class="s">
+    <header class="hd" style="margin-bottom:20px">
+      <div class="kicker" data-a><span class="dot"></span>02 · Quiénes son nuestros clientes</div>
+      <h2 data-a>Conozcan a los seis segmentos</h2>
+      <p class="sub" data-a>Haz clic en una tarjeta para ver edad, ingreso y antigüedad</p>
+    </header>
+    <div class="personas" id="personas"></div>
+    <footer class="ft">Fuente: campaña de ofertas Starbucks · promedios por cliente en 30 días · “Responde” = % de ofertas que vio antes de comprar</footer>
+  </div>
+  <aside class="notes">Presentar cada grupo como una persona. Destacar: Promo-sensibles (valiosos y receptivos), Premium (compran solos), Frecuentes (vienen diario, ticket chico), Nuevos (no forman hábito).</aside>
+</section>
+
+<!-- ================================================================ 11 · TIEMPO -->
+<section class="t-2" data-title="Comportamiento en el tiempo">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>02 · Quiénes son nuestros clientes</div>
+      <h2 data-a>Los fieles se quedan; los nuevos no logran subir</h2>
+      <p class="sub" data-a>Cada 6 días clasificamos a cada cliente por lo que gastó: Inactivo ($0), Bajo (hasta $10), Medio ($10 a $30) o Alto (más de $30)</p>
+    </header>
+    <div class="row grow">
+      <div class="screen" data-a style="width:900px;flex:none;align-self:flex-start">
+        <video src="media/CadenaMarkov.mp4" data-poster="media/CadenaMarkov.png" muted playsinline preload="auto"></video>
+        <button class="replay" aria-label="Repetir animación"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg></button>
+      </div>
+      <div class="well grow col" data-a style="gap:12px;padding:22px 24px">
+        <div class="seg" id="seg-temporal">
+          <button class="on" data-m="dejar">Dejan de comprar</button>
+          <button data-m="alto">Siguen en Alto</button>
+          <button data-m="regresa">Regresan</button>
+        </div>
+        <div id="temporal-titulo" style="font:800 19px/1.3 var(--f-ui)">Probabilidad de dejar de comprar en los siguientes 6 días</div>
+        <div class="chart grow" data-chart="temporal"></div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: campaña de ofertas Starbucks · 68,000 transiciones entre periodos de 6 días</footer>
+  </div>
+  <aside class="notes">Lectura: de cada 100 clientes en Alto, 48 siguen en Alto. Promo-sensibles se quedan en Alto 55 % de las veces; Nuevos solo 7 %. Los inactivos bajaron de 38 % a 21 %, pero el último periodo ya está en el equilibrio: repetir lo mismo no sube más a nadie.</aside>
+</section>
+
+<!-- ================================================================ 12 · SEPARADOR III -->
+<section class="t-sep3 sep" data-transition="zoom-in fade-out" data-title="Acto 2b">
+  <div class="s">
+    <div class="sep-num">03</div>
+    <div class="act" data-a>Nudo · parte 2</div>
+    <h2 data-a>¿Funcionaron las campañas?</h2>
+    <p data-a>Qué se vio, qué se pagó y qué sí cambió el comportamiento</p>
+    <div class="sep-map" data-a><span>01 Punto de partida</span><span>02 Clientes</span><span class="on">03 Campañas</span><span>04 El plan</span></div>
+  </div>
+</section>
+
+<!-- ================================================================ 13 · EMBUDO -->
+<section class="t-3" data-title="Embudo y recompensas">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>03 · ¿Funcionaron las campañas?</div>
+      <h2 data-a>3 de cada 10 dólares de recompensa no compraron nada</h2>
+      <p class="sub" data-a>Una oferta se completa sola al llegar al gasto mínimo, aunque el cliente nunca la haya abierto</p>
+    </header>
+    <div class="row grow">
+      <div class="screen" data-a style="width:960px;flex:none;align-self:flex-start">
+        <video src="media/Embudo.mp4" data-poster="media/Embudo.png" muted playsinline preload="auto"></video>
+        <button class="replay" aria-label="Repetir animación"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg></button>
+      </div>
+      <div class="well grow col" data-a style="gap:6px;padding:22px 24px">
+        <div style="font:800 19px/1.3 var(--f-ui)">% de la recompensa pagada sin que vieran la oferta</div>
+        <div style="font:500 15px/1.3 var(--f-ui);color:var(--ink-3)">y monto en dólares por segmento</div>
+        <div class="chart grow" data-chart="fuga"></div>
+        <div class="lbl" style="margin:0;font-size:17px">En <b style="color:var(--purple)">Premium sin oferta</b> casi la mitad de lo pagado no influyó en la compra.</div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: campaña de ofertas Starbucks · recompensas de 2x1 y descuentos · $162 mil pagados</footer>
+  </div>
+  <aside class="notes">Definición clave: una oferta “funcionó” solo si el cliente la vio antes de completarla. Si no la vio, la recompensa se pagó a alguien que habría comprado igual.</aside>
+</section>
+
+<!-- ================================================================ 14 · CANAL -->
+<section class="t-3" data-title="Redes sociales">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>03 · ¿Funcionaron las campañas?</div>
+      <h2 data-a>Con redes sociales, la oferta se ve casi el doble</h2>
+      <p class="sub" data-a>El canal decide si la oferta llega a los ojos del cliente</p>
+    </header>
+    <div class="row grow">
+      <div class="screen" data-a style="width:1010px;flex:none;align-self:flex-start">
+        <video src="media/Canal.mp4" data-poster="media/Canal.png" muted playsinline preload="auto"></video>
+        <button class="replay" aria-label="Repetir animación"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg></button>
+      </div>
+      <div class="col grow">
+        <div class="card" data-a><div class="big md ink">4 de 4</div><div class="lbl">ofertas sin redes sociales son las 4 peores del ranking</div></div>
+        <div class="card" data-a><div class="big md">+<span data-count="13500">13,500</span></div><div class="lbl">ofertas vistas por campaña si todas salieran por redes<small>estimación con los mismos envíos</small></div></div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: campaña de ofertas Starbucks · 45,683 ofertas con redes sociales y 30,594 sin ellas</footer>
+  </div>
+  <aside class="notes">La comparación más fuerte: el 2x1 de $5 con redes y solo 5 días funciona 46 %; el mismo 2x1 sin redes y con 7 días, 27 %. Menos tiempo pero mejor canal gana.</aside>
+</section>
+
+<!-- ================================================================ 15 · RANKING + COSTO -->
+<section class="t-3" data-title="Ranking de ofertas">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>03 · ¿Funcionaron las campañas?</div>
+      <h2 data-a>Los descuentos fáciles ganan; los 2x1 de $10 cuestan 6× más</h2>
+      <p class="sub" data-a>Los dos 2x1 de $10 se llevaron $69 mil (43 % de todas las recompensas) y funcionan apenas 34 a 36 %</p>
+    </header>
+    <div class="well grow col" data-a style="padding:20px 30px 16px;gap:8px">
+      <div class="legend"><span><i class="sw" style="background:var(--green)"></i>con redes sociales</span><span><i class="sw" style="background:#BDC6C1"></i>sin redes sociales</span><span><i class="sw" style="background:var(--loss)"></i>respuesta cara (más de $10)</span></div>
+      <div class="chart grow" data-chart="ranking"></div>
+    </div>
+    <footer class="ft">Fuente: campaña de ofertas Starbucks · ~7,600 envíos por oferta (margen de ±1 punto) · costo por respuesta = recompensa pagada ÷ ofertas que funcionaron</footer>
+  </div>
+  <aside class="notes">Costo por respuesta: cuánto pagamos en recompensas por cada oferta que sí cambió el comportamiento. El mejor descuento ($2 al gastar $10, 10 días) cuesta $2.29; el 2x1 de $10 de 7 días, $14.09. La peor oferta pide gastar $20 cuando la compra típica es de $9.</aside>
+</section>
+
+<!-- ================================================================ 16 · MAPA OFERTA × SEGMENTO -->
+<section class="t-3" data-title="Oferta por segmento">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>03 · ¿Funcionaron las campañas?</div>
+      <h2 data-a>Se envió lo mismo a todos, pero cada grupo responde distinto</h2>
+      <p class="sub" data-a>% de ofertas que funcionaron por segmento · ★ = la mejor oferta para cada grupo</p>
+    </header>
+    <div class="row grow">
+      <div class="well grow" data-a style="padding:18px 22px 10px"><div class="chart" data-chart="heat"></div></div>
+      <div class="well col" data-a style="width:330px;flex:none;gap:8px;padding:20px 22px">
+        <div style="font:800 18px/1.3 var(--f-ui)">Lo que recibió cada segmento</div>
+        <div style="font:500 14px/1.35 var(--f-ui);color:var(--ink-3)">~4.5 ofertas por cliente, con la misma mezcla</div>
+        <div class="chart grow" data-chart="mezcla"></div>
+        <div class="legend" style="font-size:13px;gap:10px"><span><i class="sw" style="background:#5E7F73"></i>2x1</span><span><i class="sw" style="background:#93B3A5"></i>Descuento</span><span><i class="sw" style="background:#C9D8D0"></i>Informativa</span></div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: campaña de ofertas Starbucks · pasa el cursor sobre una celda para ver el detalle</footer>
+  </div>
+  <aside class="notes">Los Promo-sensibles responden a todo, incluso a la oferta de $20 (58 %). Frecuentes: descuentos fáciles e informativa por redes. Premium: solo el descuento de $2/$10 pasa de 60 %. Nuevos y Sin perfil: casi no responden a 2x1; lo mejor es la informativa por redes. Inactivos: nada.</aside>
+</section>
+
+<!-- ================================================================ 17 · SEPARADOR IV -->
+<section class="t-sep4 sep" data-transition="zoom-in fade-out" data-title="Acto 3">
+  <div class="s">
+    <div class="sep-num">04</div>
+    <div class="act" data-a>Desenlace</div>
+    <h2 data-a>El plan</h2>
+    <p data-a>La oferta correcta, para la persona correcta, por el canal correcto</p>
+    <div class="sep-map" data-a><span>01 Punto de partida</span><span>02 Clientes</span><span>03 Campañas</span><span class="on">04 El plan</span></div>
+  </div>
+</section>
+
+<!-- ================================================================ 18 · PLAYBOOK -->
+<section class="t-4" data-title="Playbook por segmento">
+  <div class="s">
+    <header class="hd" style="margin-bottom:18px">
+      <div class="kicker" data-a><span class="dot"></span>04 · El plan</div>
+      <h2 data-a>Mandar a cada segmento la oferta que sí le funciona</h2>
+    </header>
+    <div class="play">
+      <div class="hdr" data-a><span>Segmento</span><span>Qué hacer</span><span>Oferta sugerida (% que funciona hoy)</span><span>Evitar</span></div>
+      <div class="pr" data-a style="--c:#00704A"><div class="nm">Promo-sensibles<small>27 % clientes · 52 % ventas</small></div><div class="do">Mantener ofertas y <b>subir la exigencia</b>: responden incluso cuando hay que gastar $20.</div><div class="of">Descuento $5 al gastar $20 <span>58 %</span></div><div class="av">2x1 caros que no necesitan</div></div>
+      <div class="pr" data-a style="--c:#8E5A9E"><div class="nm">Premium sin oferta<small>20 % clientes · 27 % ventas</small></div><div class="do"><b>Quitar los 2x1 de $10.</b> Beneficios de experiencia; si se envía algo, que sea barato.</div><div class="of">Descuento $2 al gastar $10 <span>62 %</span></div><div class="av">Recompensas sin vista (47 %)</div></div>
+      <div class="pr" data-a style="--c:#E39B2D"><div class="nm">Frecuentes de ticket bajo<small>17 % clientes · 15 % ventas</small></div><div class="do"><b>Subir el gasto por visita</b> con descuentos fáciles por redes (complementos, tamaño mayor).</div><div class="of">Descuento $3 al gastar $7 <span>73 %</span></div><div class="av">2x1 de $10 y oferta de $20</div></div>
+      <div class="pr" data-a style="--c:#4A90C2"><div class="nm">Nuevos de bajo gasto<small>20 % clientes · 4 % ventas</small></div><div class="do"><b>Formar el hábito</b>: bienvenida con mensajes por redes y luego un descuento fácil.</div><div class="of">Informativa por redes <span>46 %</span></div><div class="av">2x1 (solo 4–18 %)</div></div>
+      <div class="pr" data-a style="--c:#6E6E6E"><div class="nm">Inactivos<small>2 % clientes · 0 % ventas</small></div><div class="do"><b>Dejar de enviar recompensas.</b> Probar una reactivación de bajo costo (mensaje, encuesta).</div><div class="of">Ninguna con recompensa <span>0 %</span></div><div class="av">Cualquier recompensa</div></div>
+      <div class="pr" data-a style="--c:#8C8C8C"><div class="nm">Sin perfil<small>13 % clientes · 2 % ventas</small></div><div class="do"><b>Pedir que completen su perfil</b> a cambio de un beneficio pequeño, para poder segmentarlos.</div><div class="of">Recompensa por completar perfil</div><div class="av">Ofertas a ciegas</div></div>
+    </div>
+    <footer class="ft">Fuente: campaña de ofertas Starbucks · % de ofertas que funcionaron en cada segmento</footer>
+  </div>
+  <aside class="notes">Cada recomendación sale del mapa oferta × segmento. La columna verde es la evidencia: qué tanto funciona hoy esa oferta en ese grupo.</aside>
+</section>
+
+<!-- ================================================================ 19 · TRES REGLAS -->
+<section class="t-4" data-title="Tres reglas">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>04 · El plan</div>
+      <h2 data-a>Tres reglas para todas las campañas</h2>
+      <p class="sub" data-a>Aplican a cualquier segmento y no requieren presupuesto adicional</p>
+    </header>
+    <div class="grid3 grow" style="align-items:stretch">
+      <div class="card rule" data-a>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></div>
+        <div class="big"><span data-count="1.9" data-dec="1">1.9</span>×</div>
+        <h3>Todo por redes sociales</h3>
+        <p>Las ofertas con redes se ven 92 % de las veces; sin ellas, 48 %. Es el cambio más barato y con mayor efecto.</p>
+        <div class="ev">Evidencia: el mismo 2x1 de $5 funciona <b>46 %</b> con redes y 5 días, contra 27 % sin redes y 7 días.</div>
+      </div>
+      <div class="card rule" data-a>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div class="big">$<span data-count="48">48</span> mil</div>
+        <h3>Pagar solo si la vio</h3>
+        <p>La recompensa se activa únicamente si el cliente abrió la oferta. Ahorro de hasta $48 mil en una campaña como esta.</p>
+        <div class="ev">Evidencia: <b>30 %</b> de lo pagado fue a quien no vio la oferta; en Premium, 47 %.</div>
+      </div>
+      <div class="card rule" data-a>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 8h4v8H5zM15 5h4v14h-4z"/></svg></div>
+        <div class="big ink">10 %</div>
+        <h3>Grupo de control</h3>
+        <p>Dejar a 10 % de cada segmento sin ofertas para medir cuánto venden de más las ofertas (ventas incrementales) y su retorno real.</p>
+        <div class="ev">Hoy no podemos separar lo que vendió la oferta de lo que el cliente <b>habría comprado igual</b>.</div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: campaña de ofertas Starbucks · 76,277 ofertas · $162 mil en recompensas</footer>
+  </div>
+  <aside class="notes">Tres reglas operativas. La tercera responde la pregunta que hoy no podemos contestar con certeza: ¿cuánto de la venta habría ocurrido sin oferta?</aside>
+</section>
+
+<!-- ================================================================ 20 · SIMULADOR (WOW) -->
+<section class="t-4" data-title="Simulador de impacto">
+  <div class="s">
+    <header class="hd" style="margin-bottom:20px">
+      <div class="kicker" data-a><span class="dot"></span>04 · El plan</div>
+      <h2 data-a>Mismas ofertas, mejor resultado</h2>
+      <p class="sub" data-a>Activen las palancas y vean el impacto con los mismos clientes y el mismo número de ofertas</p>
+    </header>
+    <div class="sim">
+      <div class="card panel" data-a>
+        <div>
+          <div class="switch" style="cursor:default"><div class="txt">Ofertas enviadas por redes sociales<small>Hoy salen 6 de cada 10</small></div><div class="big sm" id="sim-redes-v">60 %</div></div>
+          <input type="range" class="range" id="sim-redes" min="60" max="100" step="1" value="60" style="margin-top:16px" aria-label="Porcentaje de ofertas por redes sociales">
+        </div>
+        <div class="switch" id="sim-pagar" role="switch" aria-checked="false" tabindex="0"><div class="txt">Pagar recompensa solo si la vio<small>Hoy se paga aunque no la abra</small></div><div class="track"><div class="knob"></div></div></div>
+        <div class="switch" id="sim-inact" role="switch" aria-checked="false" tabindex="0"><div class="txt">Sin recompensas a Inactivos<small>0 % de respuesta hoy</small></div><div class="track"><div class="knob"></div></div></div>
+        <div class="switch" style="cursor:default"><div class="txt">Horizonte</div><div class="seg" id="sim-horiz"><button class="on" data-h="1">1 campaña</button><button data-h="12">1 año</button></div></div>
+        <div style="display:flex;gap:14px;margin-top:auto">
+          <button class="btn" id="sim-todo"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>Activar todo</button>
+          <button class="btn" id="sim-reset" style="color:var(--ink-2)">Reiniciar</button>
+        </div>
+      </div>
+      <div class="out">
+        <div class="well result" data-a style="padding:20px 28px">
+          <div><div class="lbl" style="margin:0">Ofertas vistas adicionales</div><div class="gauge"><i id="g-vistas"></i></div></div>
+          <div><div class="big" id="r-vistas">+0</div><div class="delta" id="d-vistas">74 % de las ofertas se ven hoy</div></div>
+        </div>
+        <div class="well result" data-a style="padding:20px 28px">
+          <div><div class="lbl" style="margin:0">Recompensas que dejamos de regalar</div><div class="gauge loss"><i id="g-pago"></i></div></div>
+          <div><div class="big" id="r-pago">$0</div><div class="delta" id="d-pago">70 % de lo pagado tiene efecto hoy</div></div>
+        </div>
+        <div class="well result" data-a style="padding:20px 28px">
+          <div><div class="lbl" style="margin:0">Envíos sin retorno que evitamos</div><div class="gauge"><i id="g-inact"></i></div></div>
+          <div><div class="big ink" id="r-inact">0</div><div class="delta" id="d-inact">sin perder ventas</div></div>
+        </div>
+      </div>
+    </div>
+    <footer class="ft">Supuestos: la tasa de vista de cada canal se mantiene (92 % con redes, 48 % sin redes); “1 año” repite 12 veces una campaña como esta. Es un escenario, no una promesa.</footer>
+  </div>
+  <aside class="notes">Momento WOW: empezar con todo apagado (situación actual) y activar las palancas una por una, o con “Activar todo”. Mensaje: no necesitamos más presupuesto ni más ofertas.</aside>
+</section>
+
+<!-- ================================================================ 21 · HOJA DE RUTA -->
+<section class="t-4" data-title="Hoja de ruta">
+  <div class="s">
+    <header class="hd">
+      <div class="kicker" data-a><span class="dot"></span>04 · El plan</div>
+      <h2 data-a>Cómo empezamos: 30 · 60 · 90 días</h2>
+      <p class="sub" data-a>De ajustes inmediatos a una medición del retorno real</p>
+    </header>
+    <div class="road">
+      <div class="card stage" data-a>
+        <span class="num">1</span><div class="when">Días 0 a 30</div>
+        <h3>Ajustes rápidos</h3>
+        <ul><li>Todas las ofertas por redes sociales</li><li>Regla: recompensa solo si se vio la oferta</li><li>Apagar recompensas a Inactivos</li><li>Retirar 2x1 de $10 a Premium</li></ul>
+        <span class="pill in kpi">Meta: más de 90 % de ofertas vistas</span>
+      </div>
+      <div class="card stage" data-a>
+        <span class="num">2</span><div class="when">Días 30 a 60</div>
+        <h3>Piloto por segmento</h3>
+        <ul><li>Playbook por segmento con 10 % de grupo de control</li><li>Secuencia de bienvenida para Nuevos</li><li>Campaña “completa tu perfil”</li><li>Pruebas A/B de mecánica y canal</li></ul>
+        <span class="pill in kpi">Meta: menos de 10 % de recompensa sin vista</span>
+      </div>
+      <div class="card stage" data-a>
+        <span class="num">3</span><div class="when">Días 60 a 90</div>
+        <h3>Medir y escalar</h3>
+        <ul><li>Ventas incrementales vs grupo de control</li><li>Retorno: ventas extra ÷ costo de recompensas</li><li>Actualizar los segmentos con datos nuevos</li><li>Escalar lo que funcione</li></ul>
+        <span class="pill in kpi">Meta: retorno medido por segmento</span>
+      </div>
+    </div>
+    <footer class="ft">Indicadores a seguir: % de ofertas vistas · % de recompensa sin vista · ticket promedio · % de clientes en gasto Alto</footer>
+  </div>
+  <aside class="notes">El plan empieza con cambios operativos de costo cero y termina con una medición formal del retorno.</aside>
+</section>
+
+<!-- ================================================================ 22 · CIERRE -->
+<section class="t-cierre close" data-transition="fade" data-title="Cierre">
+  <div class="s">
+    <blockquote data-a>“No se trata de mandar <em>más</em> ofertas, sino la oferta <em>correcta</em> a la persona correcta.”</blockquote>
+    <div class="qa" data-a><div>¿Preguntas?</div></div>
+    <div class="cover-meta" data-a style="justify-content:center;margin-top:40px">
+      <span class="pill">Gael Escartin Salva</span><span class="pill">Mauricio Azael Robles Yasumura</span><span class="pill">Ángel Alejandro López Ochoa</span>
+    </div>
+  </div>
+  <aside class="notes">Cerrar con la frase y abrir preguntas. Los anexos están disponibles para preguntas técnicas.</aside>
+</section>
+
+<!-- ================================================================ ANEXOS -->
+<section class="t-sepA sep" data-transition="zoom-in fade-out" data-title="Anexos">
+  <div class="s">
+    <div class="sep-num" style="font-size:400px">A</div>
+    <div class="act" data-a>Para la audiencia técnica</div>
+    <h2 data-a>Anexos técnicos</h2>
+    <p data-a>Datos y limpieza · variables · elección del número de segmentos · estabilidad · matriz de transición · validación del equipo · glosario y limitaciones</p>
+  </div>
+</section>
+
+<!-- A1 · DATOS Y LIMPIEZA -->
+<section class="t-a" data-title="A1 Datos y limpieza">
+  <div class="s">
+    <header class="hd" style="margin-bottom:18px">
+      <div class="kicker" data-a><span class="dot"></span>Anexo 1</div>
+      <h2 data-a>Datos y limpieza</h2>
+    </header>
+    <div class="row grow">
+      <div class="col" style="width:400px;flex:none;gap:16px">
+        <div class="card sm" data-a><div class="big sm ink">10</div><div class="lbl" style="margin-top:4px">ofertas · <code>portfolio.json</code><small>tipo, gasto mínimo, recompensa, vigencia, canales</small></div></div>
+        <div class="card sm" data-a><div class="big sm ink">17,000</div><div class="lbl" style="margin-top:4px">clientes · <code>profile.json</code><small>edad, género, ingreso, fecha de alta</small></div></div>
+        <div class="card sm" data-a><div class="big sm ink">306,534</div><div class="lbl" style="margin-top:4px">eventos · <code>transcript.json</code><small>139 mil compras · 76 mil recibidas · 58 mil vistas · 33 mil completadas</small></div></div>
+      </div>
+      <div class="grow col" style="gap:14px">
+        <table class="t" data-a>
+          <thead><tr><th>Problema</th><th>Diagnóstico</th><th>Decisión</th></tr></thead>
+          <tbody>
+            <tr><td>Edad = 118 (relleno)</td><td class="num">2,175</td><td>Nulo; sin género ni ingreso → grupo “Sin perfil”, sin imputar</td></tr>
+            <tr><td>Renglones duplicados</td><td class="num">397</td><td>Eliminados (todos “oferta completada”: duplicaban recompensas)</td></tr>
+            <tr><td>Llave de oferta inconsistente</td><td>“offer id” / “offer_id”</td><td>Unificada para cruzar recibidas, vistas y completadas</td></tr>
+            <tr><td>Vistas después de vencer</td><td class="num">1,158</td><td>No cuentan como vista (no pudieron influir)</td></tr>
+            <tr><td>Misma oferta recibida varias veces</td><td class="num">12,989</td><td>Cada evento se asigna a la recepción más reciente vigente</td></tr>
+            <tr><td>Compras atípicas (hasta $1,062)</td><td class="num">478 &gt; $100</td><td>Se conservan; tope en percentil 99 solo para el modelo</td></tr>
+          </tbody>
+        </table>
+        <div class="card sm" data-a style="border-left:0"><div class="lbl" style="margin:0"><b class="g">¿Cuándo “funcionó” una oferta?</b> 2x1 y descuentos: el cliente la vio <b>antes</b> de completarla. Informativa: la vio y compró después, dentro de la vigencia. Conciliación: 33,182 completadas vs 33,101 asignadas (0.2 % de diferencia).</div></div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: notebook de la Práctica 1 · validaciones automáticas (asserts) en cada paso</footer>
+  </div>
+</section>
+
+<!-- A2 · VARIABLES -->
+<section class="t-a" data-title="A2 Variables">
+  <div class="s">
+    <header class="hd" style="margin-bottom:18px">
+      <div class="kicker" data-a><span class="dot"></span>Anexo 2</div>
+      <h2 data-a>Variables del modelo y preparación</h2>
+      <p class="sub" data-a>Unidad de análisis: el cliente · 14,825 clientes con perfil completo · 8 variables</p>
+    </header>
+    <div class="row grow">
+      <table class="t" data-a style="width:780px;flex:none;align-self:flex-start">
+        <thead><tr><th>Variable</th><th>Qué mide</th><th style="text-align:right">Promedio</th></tr></thead>
+        <tbody>
+          <tr><td><b>Edad</b></td><td>Años</td><td class="num">54</td></tr>
+          <tr><td><b>Ingreso anual (USD)</b></td><td>Ingreso declarado</td><td class="num">$65,405</td></tr>
+          <tr><td><b>Antigüedad (días)</b></td><td>Días desde el registro</td><td class="num">517</td></tr>
+          <tr><td><b>Visitas al mes</b></td><td>Compras en 30 días</td><td class="num">8.2</td></tr>
+          <tr><td><b>Gasto mensual (USD)</b></td><td>Suma de compras</td><td class="num">$104</td></tr>
+          <tr><td><b>Ticket promedio (USD)</b></td><td>Gasto ÷ compras</td><td class="num">$13</td></tr>
+          <tr><td><b>% de ofertas vistas</b></td><td>Vistas ÷ recibidas</td><td class="num">74 %</td></tr>
+          <tr><td><b>% de ofertas que funcionaron</b></td><td>2x1 y descuentos que funcionaron ÷ recibidos</td><td class="num">38 %</td></tr>
+        </tbody>
+      </table>
+      <div class="col grow" style="gap:20px">
+        <div style="font:800 19px/1.3 var(--f-ui)" data-a>Preparación antes de agrupar</div>
+        <div class="chain" data-a>
+          <div class="card sm">Tope en p99<small>visitas, gasto y ticket</small></div><span class="arr">→</span>
+          <div class="card sm">Logaritmo<small>reduce la asimetría</small></div><span class="arr">→</span>
+          <div class="card sm">Estandarizar<small>todas pesan igual</small></div>
+        </div>
+        <div class="card sm formula" data-a>\( z = \dfrac{x-\bar{x}}{s} \) <span class="y">y</span> \( x' = \log(1+x) \)</div>
+        <div class="card sm" data-a><div class="lbl" style="margin:0">Correlación más alta: <b>gasto–ticket 0.76</b>; ninguna supera 0.8, así que no hay variables redundantes. Género y “% completada sin ver” solo se usan para describir los grupos.</div></div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: notebook de la Práctica 1 · sección 5 (ingeniería de características)</footer>
+  </div>
+</section>
+
+<!-- A3 · ELECCIÓN DE K -->
+<section class="t-a" data-title="A3 Número de segmentos">
+  <div class="s">
+    <header class="hd" style="margin-bottom:18px">
+      <div class="kicker" data-a><span class="dot"></span>Anexo 3</div>
+      <h2 data-a>¿Por qué cinco segmentos? Codo, silueta y Davies-Bouldin</h2>
+      <p class="sub" data-a>K-Means con 10 arranques por cada k de 2 a 8 · silueta en muestra de 6,000 clientes</p>
+    </header>
+    <div class="row grow">
+      <div class="screen" data-a style="width:980px;flex:none;align-self:flex-start">
+        <video src="media/CodoSilueta.mp4" data-poster="media/CodoSilueta.png" muted playsinline preload="auto"></video>
+        <button class="replay" aria-label="Repetir animación"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg></button>
+      </div>
+      <div class="col grow" style="gap:14px">
+        <table class="t" data-a id="tabla-k"><thead><tr><th>k</th><th style="text-align:right">Inercia</th><th style="text-align:right">Silueta</th><th style="text-align:right">D-B</th></tr></thead><tbody></tbody></table>
+        <div class="card sm" data-a><div class="lbl" style="margin:0;font-size:16px">k = 2 tiene mejor silueta, pero solo separa “buenos y malos”: no sirve para diseñar campañas distintas. De k ≥ 4, <b>k = 5</b> tiene la mejor silueta y baja claramente el Davies-Bouldin; con 6, el grupo extra mezcla dos existentes.</div></div>
+      </div>
+    </div>
+    <footer class="ft">Silueta 0.21 = grupos con fronteras difusas: se usan como arquetipos de cliente, no como cajas cerradas</footer>
+  </div>
+</section>
+
+<!-- A4 · ESTABILIDAD Y PCA -->
+<section class="t-a" data-title="A4 Estabilidad">
+  <div class="s">
+    <header class="hd" style="margin-bottom:18px">
+      <div class="kicker" data-a><span class="dot"></span>Anexo 4</div>
+      <h2 data-a>Los segmentos son estables y se distinguen en el mapa</h2>
+      <p class="sub" data-a>Proyección en 2 componentes principales (59 % de la varianza) · muestra de 5,000 clientes</p>
+    </header>
+    <div class="row grow">
+      <div class="screen" data-a style="width:700px;flex:none;align-self:flex-start;padding:18px"><img class="poster" src="media/pca_segmentos.png" alt="Mapa PCA de los 5 segmentos" style="aspect-ratio:auto"></div>
+      <div class="col grow" style="gap:18px">
+        <div style="font:800 19px/1.3 var(--f-ui)" data-a>Estabilidad: reentrenar con otras semillas (índice de Rand ajustado)</div>
+        <div class="grid2" data-a style="grid-template-columns:repeat(4,1fr);gap:16px">
+          <div class="card sm" style="text-align:center"><div class="big sm">0.979</div><div class="lbl" style="font-size:15px">semilla 1</div></div>
+          <div class="card sm" style="text-align:center"><div class="big sm">1.000</div><div class="lbl" style="font-size:15px">semilla 7</div></div>
+          <div class="card sm" style="text-align:center"><div class="big sm">0.998</div><div class="lbl" style="font-size:15px">semilla 21</div></div>
+          <div class="card sm" style="text-align:center"><div class="big sm">0.998</div><div class="lbl" style="font-size:15px">semilla 99</div></div>
+        </div>
+        <div class="card sm" data-a><div class="lbl" style="margin:0">ARI = 1 significa asignaciones idénticas; 0, azar. Con 0.98 a 1.00, <b>los grupos no dependen del arranque aleatorio</b>.</div></div>
+        <div class="card sm" data-a><div class="lbl" style="margin:0">Nombres asignados con reglas, no con el número de grupo: menos compras → Inactivos; mayor respuesta → Promo-sensibles; más compras → Frecuentes; mayor ticket → Premium; el resto → Nuevos.</div></div>
+        <div class="card sm" data-a><div class="lbl" style="margin:0">El mapa es solo para visualizar: el modelo usa las 8 variables.</div></div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: notebook de la Práctica 1 · secciones 6.1 y 6.2</footer>
+  </div>
+</section>
+
+<!-- A5 · MATRIZ DE TRANSICIÓN -->
+<section class="t-a" data-title="A5 Matriz de transición">
+  <div class="s">
+    <header class="hd" style="margin-bottom:18px">
+      <div class="kicker" data-a><span class="dot"></span>Anexo 5</div>
+      <h2 data-a>Matriz de transición: método y lectura</h2>
+      <p class="sub" data-a>5 periodos de 6 días · cortes $10 y $30 por terciles del gasto · 17,000 clientes × 4 pares = 68,000 transiciones</p>
+    </header>
+    <div class="row grow">
+      <div class="well" data-a style="width:640px;flex:none;padding:20px 24px"><div class="chart" data-chart="markov"></div></div>
+      <div class="col grow" style="gap:16px">
+        <div class="card sm formula" data-a>\( P_{ij} = \dfrac{n_{ij}}{\sum_k n_{ik}} \) <span class="y">cada renglón suma 100 %</span></div>
+        <div class="card sm" data-a><div class="lbl" style="margin:0"><b>Equilibrio de largo plazo</b> \( \pi = \pi P \): Inactivo 23 % · Bajo 26 % · Medio 26 % · Alto 25 %. El periodo 5 (21 · 28 · 27 · 25 %) ya está ahí.</div></div>
+        <div class="card sm" data-a><div class="lbl" style="margin:0"><b>Permanencia esperada</b> \( 1/(1-P_{ii}) \): Bajo ≈ 14 días · Alto ≈ 12 días · Inactivo y Medio ≈ 9 días. “Bajo” es el estado más pegajoso.</div></div>
+        <div class="card sm" data-a><div class="lbl" style="margin:0"><b>Por segmento:</b> Promo-sensibles pasan la mitad del tiempo en Alto; Nuevos 0.6 %; Inactivos se quedan inactivos 96 % de las veces.</div></div>
+      </div>
+    </div>
+    <footer class="ft">Fuente: notebook de la Práctica 1 · sección 7 · equilibrio y permanencia calculados para este anexo</footer>
+  </div>
+</section>
+
+<!-- A6 · VALIDACIÓN DEL EQUIPO -->
+<section class="t-a" data-title="A6 Validación">
+  <div class="s">
+    <header class="hd" style="margin-bottom:16px">
+      <div class="kicker" data-a><span class="dot"></span>Anexo 6</div>
+      <h2 data-a>Tres análisis del equipo, una misma conclusión</h2>
+      <p class="sub" data-a>Cada integrante segmentó por su cuenta con 2, 3 y 5 grupos: los patrones se repiten</p>
+    </header>
+    <div class="row grow">
+      <table class="t" data-a style="flex:1;align-self:flex-start;font-size:16px">
+        <thead><tr><th></th><th>2 grupos</th><th>3 grupos</th><th>5 grupos + sin perfil</th></tr></thead>
+        <tbody>
+          <tr><td><b>Grupo de mayor valor</b></td><td>64 % de clientes · $150/mes</td><td>53 % · $156/mes</td><td>Promo-sensibles 27 % · $197/mes</td></tr>
+          <tr><td><b>Su peso en ventas</b></td><td>≈ 92 %</td><td>81 %</td><td>52 % (78 % con Premium)</td></tr>
+          <tr><td><b>Grupo de menor valor</b></td><td>36 % · $24/mes · éxito 20 %</td><td>31 % · $22/mes · 13 %</td><td>Nuevos 20 % · $22/mes · 11 %</td></tr>
+          <tr><td><b>Mejor oferta</b></td><td colspan="3">Descuento $2 al gastar $10 · 10 días, en los tres análisis</td></tr>
+          <tr><td><b>Bajo consumo</b></td><td colspan="3">Responde mejor a la informativa que a los 2x1, en los tres análisis</td></tr>
+          <tr><td><b>Estabilidad</b></td><td>Alto valor se queda 98 %</td><td>Frecuente semanal se queda 62 %</td><td>Alto se queda 48 % (6 días)</td></tr>
+          <tr><td><b>Silueta</b></td><td>—</td><td class="num" style="text-align:left">0.184</td><td class="num" style="text-align:left">0.212</td></tr>
+        </tbody>
+      </table>
+      <div class="well col" data-a style="width:420px;flex:none;gap:6px;padding:20px 22px">
+        <div style="font:800 17px/1.3 var(--f-ui)">Matriz semanal por frecuencia</div>
+        <div style="font:500 14px/1.3 var(--f-ui);color:var(--ink-3)">Compras por semana: 0, 1 o 2 y más</div>
+        <div class="chart grow" data-chart="semanal"></div>
+      </div>
+    </div>
+    <footer class="ft">“Éxito” y “completación” (2 y 3 grupos) incluyen ofertas completadas sin verse; “funcionó” (5 grupos) exige verla antes, por eso sus cifras son más bajas y más estrictas</footer>
+  </div>
+</section>
+
+<!-- A7 · GLOSARIO -->
+<section class="t-a" data-title="A7 Glosario">
+  <div class="s">
+    <header class="hd" style="margin-bottom:18px">
+      <div class="kicker" data-a><span class="dot"></span>Anexo 7</div>
+      <h2 data-a>Glosario de métricas</h2>
+    </header>
+    <div class="defs grow">
+      <div class="card sm" data-a><h4>Oferta que funcionó</h4><p>2x1 o descuento visto antes de completarse; informativa vista con compra posterior dentro de la vigencia.</p></div>
+      <div class="card sm" data-a><h4>Completada sin ver</h4><p>El cliente alcanzó el gasto mínimo y se pagó la recompensa, pero nunca abrió la oferta (o la abrió después).</p></div>
+      <div class="card sm" data-a><h4>Costo por respuesta</h4><p>Recompensa total pagada en una oferta ÷ número de veces que funcionó. Incluye lo pagado sin vista.</p></div>
+      <div class="card sm" data-a><h4>Ticket promedio</h4><p>Gasto total del cliente ÷ número de compras en los 30 días.</p></div>
+      <div class="card sm" data-a><h4>Gasto diario con / sin oferta</h4><p>Gasto en las horas con una oferta vista y vigente, contra el resto del mes, llevado a USD por día.</p></div>
+      <div class="card sm" data-a><h4>Estados de gasto (cada 6 días)</h4><p>Inactivo $0 · Bajo hasta $10 · Medio $10 a $30 · Alto más de $30.</p></div>
+      <div class="card sm" data-a><h4>Grupo de control</h4><p>Clientes a los que a propósito no se envía oferta, para comparar y medir el efecto real (ventas incrementales).</p></div>
+      <div class="card sm" data-a><h4>2x1 · Descuento · Informativa</h4><p>2x1: producto igual gratis al alcanzar el gasto mínimo. Descuento: $ de descuento al gastar un mínimo. Informativa: solo comunica.</p></div>
+    </div>
+    <footer class="ft">Definiciones usadas en toda la presentación</footer>
+  </div>
+</section>
+
+<!-- A8 · LIMITACIONES -->
+<section class="t-a" data-title="A8 Limitaciones">
+  <div class="s">
+    <header class="hd" style="margin-bottom:18px">
+      <div class="kicker" data-a><span class="dot"></span>Anexo 8</div>
+      <h2 data-a>Limitaciones y siguientes pasos analíticos</h2>
+    </header>
+    <div class="grid2 grow">
+      <div class="card col" data-a style="gap:14px">
+        <div style="font:800 22px/1.2 var(--f-ui)" class="loss">Lo que estos datos no pueden decir</div>
+        <ul class="lista loss"><li>Sin grupo de control: los aumentos son asociaciones, no efecto causal medido.</li><li>Solo 30 días: no capta estacionalidad ni lealtad de largo plazo.</li><li>El canal está mezclado con la oferta (las ofertas sin redes también son más difíciles); los pares casi idénticos reducen ese sesgo.</li><li>Segmentos con fronteras difusas (silueta 0.21).</li><li>Datos simulados: ingresos con escalones y edad 118 como relleno.</li></ul>
+      </div>
+      <div class="card col" data-a style="gap:14px">
+        <div style="font:800 22px/1.2 var(--f-ui)" class="g">Siguientes pasos</div>
+        <ul class="lista"><li>Diseñar la próxima campaña como experimento (A/B con grupo de control).</li><li>Modelar la probabilidad de respuesta por cliente y oferta (propensión).</li><li>Medir retorno: ventas incrementales ÷ costo de recompensas.</li><li>Recalcular los segmentos después de cada campaña.</li><li>Recuperar los perfiles faltantes para segmentar al 13 % restante.</li></ul>
+      </div>
+    </div>
+    <footer class="ft">Detalle completo en el documento de análisis del equipo</footer>
+  </div>
+</section>
+
+</div>
+</div>
+
+<div class="dock" aria-label="Navegación">
+  <button id="nav-prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <button id="nav-over" aria-label="Vista general"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></button>
+  <button id="nav-tema" aria-label="Cambiar tema de color" title="Tema: vivo / suave (tecla T)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.9 1.2-1.8-.5-1-.1-2.2 1.1-2.2H17a4 4 0 0 0 4-4c0-5.5-4-10-9-10z"/><circle cx="7.5" cy="11" r="1.3" fill="currentColor"/><circle cx="10.5" cy="7" r="1.3" fill="currentColor"/><circle cx="15" cy="7.5" r="1.3" fill="currentColor"/></svg></button>
+  <button id="nav-full" aria-label="Pantalla completa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  <button id="nav-next" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+</div>
+<div class="tip" id="tip"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
