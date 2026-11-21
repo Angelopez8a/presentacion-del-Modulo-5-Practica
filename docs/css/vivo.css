@@ -1,0 +1,154 @@
+/* =====================================================================
+   Tema "vivo": misma estructura neumórfica, más color.
+   Cada acto tiene su paleta; los colores de DATOS no cambian
+   (verde = funciona, coral = dinero perdido, ámbar = costo, gris = inactivo).
+   Se activa con la clase .vivo en <html> (botón de paleta o tecla T).
+   ===================================================================== */
+
+html.vivo body::before { display: none; }
+html.vivo { --track: rgba(22, 48, 42, .08); }
+
+/* sombras recalculadas por lámina para que sigan el tono del fondo */
+html.vivo .reveal .slides > section {
+  --raise: 12px 12px 26px var(--lo-soft), -12px -12px 26px var(--hi);
+  --raise-sm: 6px 6px 13px var(--lo-soft), -6px -6px 13px var(--hi);
+  --raise-xs: 3px 3px 7px var(--lo-soft), -3px -3px 7px var(--hi);
+  --inset: inset 8px 8px 16px var(--lo-soft), inset -8px -8px 16px var(--hi);
+  --inset-sm: inset 4px 4px 9px var(--lo-soft), inset -4px -4px 9px var(--hi);
+  --g-pos: linear-gradient(120deg, #00704A 8%, #13B58A 92%);
+}
+
+/* ------------------------------------------------------------ paletas por acto */
+html.vivo .reveal section.t-portada { --bg: #EEF4F0; --lo-soft: rgba(110, 150, 135, .42); --acc: #00704A; --acc2: #13B58A; --grad: linear-gradient(120deg, #00704A, #13B58A); --glow: rgba(19, 181, 138, .45); }
+html.vivo .reveal section.t-1 { --bg: #E3F0E8; --lo-soft: rgba(100, 150, 125, .45); --acc: #00704A; --acc2: #13B58A; --grad: linear-gradient(120deg, #00704A, #13B58A); --glow: rgba(19, 181, 138, .5); }
+html.vivo .reveal section.t-2 { --bg: #ECEAF6; --lo-soft: rgba(135, 125, 185, .42); --acc: #5B45B0; --acc2: #2C9CC9; --grad: linear-gradient(120deg, #5B45B0, #2C9CC9); --glow: rgba(91, 69, 176, .45); }
+html.vivo .reveal section.t-3 { --bg: #F6EDE6; --lo-soft: rgba(195, 150, 120, .42); --acc: #D2532F; --acc2: #F2A541; --grad: linear-gradient(120deg, #D2532F, #F2A541); --glow: rgba(210, 83, 47, .45); }
+html.vivo .reveal section.t-4 { --bg: #EEF2E3; --lo-soft: rgba(145, 160, 110, .45); --acc: #00704A; --acc2: #D9A21B; --grad: linear-gradient(120deg, #00704A, #4FA84A 55%, #D9A21B); --glow: rgba(217, 162, 27, .5); }
+html.vivo .reveal section.t-a { --bg: #E8ECEF; --lo-soft: rgba(125, 140, 155, .42); --acc: #3F5A6B; --acc2: #00704A; --grad: linear-gradient(120deg, #3F5A6B, #00704A); --glow: rgba(63, 90, 107, .4); }
+html.vivo .reveal section.t-cierre { --bg: #E9F0EC; --lo-soft: rgba(110, 150, 135, .42); --acc: #00704A; --acc2: #13B58A; --grad: linear-gradient(120deg, #00704A, #13B58A); --glow: rgba(19, 181, 138, .45); }
+html.vivo .reveal section[class*="t-sep"] { --acc: #00704A; }
+html.vivo .reveal section.t-sep2 { --acc: #5B45B0; }
+html.vivo .reveal section.t-sep3 { --acc: #D2532F; }
+html.vivo .reveal section.t-sepA { --acc: #3F5A6B; }
+
+/* ------------------------------------------------------------ superficies "vidrio neumórfico" */
+html.vivo .card, html.vivo .well, html.vivo .pill, html.vivo .member, html.vivo .play .pr, html.vivo .seg, html.vivo table.t td {
+  background-color: color-mix(in srgb, var(--bg) 86%, transparent);
+}
+html.vivo .screen { background: var(--bg); }
+
+/* ------------------------------------------------------------ encabezados */
+html.vivo .kicker { background: var(--grad); color: #fff; box-shadow: 0 12px 24px -12px var(--glow), var(--raise-xs); }
+html.vivo .kicker .dot { background: #fff; box-shadow: 0 0 0 4px rgba(255, 255, 255, .28); }
+
+/* ------------------------------------------------------------ cifras con degradado (semántico) */
+html.vivo .big {
+  background-image: var(--g-pos); -webkit-background-clip: text; background-clip: text; color: transparent;
+  padding-bottom: 4px; margin-bottom: -4px;
+}
+html.vivo .big.loss { background-image: linear-gradient(120deg, #B23A24 5%, #E8743B 95%); }
+html.vivo .big.amber { background-image: linear-gradient(120deg, #A7600A 5%, #E39B2D 95%); }
+html.vivo .big.ink { background-image: linear-gradient(120deg, #16302A, #3F5A6B); }
+
+/* ------------------------------------------------------------ barras de acento en tarjetas */
+html.vivo .kpis .card, html.vivo .msg, html.vivo .rule, html.vivo .road .stage { overflow: hidden; }
+html.vivo .kpis .card::before, html.vivo .msg::before, html.vivo .rule::before, html.vivo .road .stage::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 7px; background: var(--bar, var(--grad));
+}
+html.vivo .kpis .card:nth-child(1) { --bar: linear-gradient(90deg, #00704A, #13B58A); }
+html.vivo .kpis .card:nth-child(2) { --bar: linear-gradient(90deg, #13B58A, #2C9CC9); }
+html.vivo .kpis .card:nth-child(3) { --bar: linear-gradient(90deg, #2C9CC9, #5B45B0); }
+html.vivo .kpis .card:nth-child(4) { --bar: linear-gradient(90deg, #5B45B0, #B04FA8); }
+html.vivo .kpis .card:nth-child(5) { --bar: linear-gradient(90deg, #E39B2D, #F2C14E); }
+html.vivo .kpis .card:nth-child(6) { --bar: linear-gradient(90deg, #D2532F, #F2A541); }
+html.vivo .msg:nth-child(1) { --bar: linear-gradient(90deg, #00704A, #13B58A); --nb: linear-gradient(135deg, #13B58A, #00704A); }
+html.vivo .msg:nth-child(2) { --bar: linear-gradient(90deg, #D2532F, #F2A541); --nb: linear-gradient(135deg, #F2A541, #D2532F); }
+html.vivo .msg:nth-child(3) { --bar: linear-gradient(90deg, #2C9CC9, #5B45B0); --nb: linear-gradient(135deg, #2C9CC9, #5B45B0); }
+html.vivo .msg .n { background: var(--nb); color: #fff; box-shadow: 0 12px 22px -10px rgba(0, 0, 0, .35); }
+
+html.vivo .rule:nth-child(1) { --bar: linear-gradient(90deg, #13B58A, #2C9CC9); --ib: linear-gradient(135deg, #13B58A, #2C9CC9); --ig: rgba(44, 156, 201, .5); }
+html.vivo .rule:nth-child(2) { --bar: linear-gradient(90deg, #E39B2D, #F2C14E); --ib: linear-gradient(135deg, #F2A541, #D98E1F); --ig: rgba(217, 142, 31, .5); }
+html.vivo .rule:nth-child(3) { --bar: linear-gradient(90deg, #5B45B0, #B04FA8); --ib: linear-gradient(135deg, #7A5BD0, #5B45B0); --ig: rgba(91, 69, 176, .5); }
+html.vivo .rule .ico { background: var(--ib); color: #fff; box-shadow: 0 16px 30px -14px var(--ig), var(--raise-sm); }
+
+html.vivo .road .stage:nth-child(1) { --bar: linear-gradient(90deg, #00704A, #13B58A); --sc: #13B58A; }
+html.vivo .road .stage:nth-child(2) { --bar: linear-gradient(90deg, #13B58A, #4FA84A); --sc: #4FA84A; }
+html.vivo .road .stage:nth-child(3) { --bar: linear-gradient(90deg, #4FA84A, #D9A21B); --sc: #D9A21B; }
+html.vivo .road .when { color: var(--sc); }
+html.vivo .road .stage .num { color: transparent; -webkit-text-stroke: 2.5px var(--sc); text-shadow: none; opacity: .45; }
+html.vivo .road li::before { background: var(--sc); box-shadow: 0 0 0 4px color-mix(in srgb, var(--sc) 22%, transparent); }
+
+/* ------------------------------------------------------------ segmentos con su color */
+html.vivo .persona, html.vivo .segcard {
+  background: linear-gradient(160deg, color-mix(in srgb, var(--c) 16%, var(--bg)) 0%, color-mix(in srgb, var(--bg) 88%, transparent) 58%);
+}
+html.vivo .play .pr {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--c) 15%, var(--bg)) 0%, color-mix(in srgb, var(--bg) 88%, transparent) 42%);
+}
+html.vivo .play .of span { background: var(--g-pos); color: #fff; box-shadow: none; }
+
+/* ------------------------------------------------------------ controles */
+html.vivo .seg button.on { color: var(--acc); }
+html.vivo .switch.on .track { background: color-mix(in srgb, var(--acc2) 30%, var(--bg)); }
+html.vivo .switch.on .knob { background: var(--grad); }
+html.vivo .range { background: linear-gradient(90deg, color-mix(in srgb, var(--acc2) 45%, transparent) var(--p, 0%), transparent var(--p, 0%)); }
+html.vivo #sim-todo { background: var(--grad); color: #fff; box-shadow: 0 14px 26px -12px var(--glow), var(--raise-sm); }
+html.vivo .gauge i { background: linear-gradient(90deg, #13B58A, #00704A); }
+html.vivo .gauge.loss i { background: linear-gradient(90deg, #F2A541, #D2532F); }
+
+/* ------------------------------------------------------------ separadores: color de impacto */
+html.vivo .sep .s { color: #fff; overflow: hidden; }
+html.vivo .sep .act {
+  display: inline-flex; width: fit-content; padding: 10px 18px; border-radius: 999px; color: #fff;
+  background: rgba(255, 255, 255, .16); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28);
+}
+html.vivo .sep h2 { color: #fff; text-shadow: 0 8px 36px rgba(0, 0, 0, .2); }
+html.vivo .sep p { color: rgba(255, 255, 255, .88); }
+html.vivo .sep-num {
+  color: rgba(255, 255, 255, .07); -webkit-text-stroke: 3px rgba(255, 255, 255, .42);
+  text-shadow: 20px 20px 44px rgba(0, 0, 0, .24), -10px -10px 34px rgba(255, 255, 255, .14);
+}
+html.vivo .sep-map span { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .88); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .24); }
+html.vivo .sep-map span.on { background: #fff; color: var(--acc); box-shadow: 0 12px 26px -10px rgba(0, 0, 0, .4); }
+html.vivo .sep .s::before, html.vivo .sep .s::after {
+  content: ""; position: absolute; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .42), rgba(255, 255, 255, .06) 62%);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .28), 0 30px 60px -20px rgba(0, 0, 0, .25);
+  animation: flota 9s ease-in-out infinite;
+}
+html.vivo .sep .s::before { width: 300px; height: 300px; left: -90px; bottom: -110px; }
+html.vivo .sep .s::after { width: 120px; height: 120px; left: 46%; top: 70px; animation-duration: 7s; animation-delay: -2s; }
+@keyframes flota { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-22px); } }
+
+/* ------------------------------------------------------------ portada */
+html.vivo .cover .s { overflow: hidden; }
+html.vivo .cover .s::before {
+  content: ""; position: absolute; width: 820px; height: 820px; right: 20px; top: 50%; margin-top: -410px; border-radius: 50%;
+  background: conic-gradient(from 0deg, #13B58A, #2C9CC9, #5B45B0, #E2553B, #F2A541, #13B58A);
+  filter: blur(70px); opacity: .34; pointer-events: none; animation: gira 26s linear infinite;
+}
+@keyframes gira { to { transform: rotate(360deg); } }
+html.vivo .cover-grid { position: relative; }
+html.vivo .cover h1 em {
+  background: linear-gradient(100deg, #00704A 5%, #13B58A 40%, #2C9CC9 70%, #5B45B0 98%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: .1em;
+}
+html.vivo .cover .device {
+  background: rgba(255, 255, 255, .42); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  box-shadow: 0 40px 80px -36px rgba(40, 60, 90, .45), inset 0 0 0 1.5px rgba(255, 255, 255, .7);
+}
+html.vivo .cover .device .screen { background: #F3F7F4; }
+html.vivo .member .av { background: var(--g); color: #fff; box-shadow: 0 10px 18px -8px rgba(0, 0, 0, .35); }
+html.vivo .member:nth-child(1) .av { --g: linear-gradient(135deg, #13B58A, #00704A); }
+html.vivo .member:nth-child(2) .av { --g: linear-gradient(135deg, #2C9CC9, #5B45B0); }
+html.vivo .member:nth-child(3) .av { --g: linear-gradient(135deg, #F2A541, #D2532F); }
+
+/* ------------------------------------------------------------ cierre (se conserva, solo un toque) */
+html.vivo .close .qa div span { padding: 0 .06em; background: linear-gradient(120deg, #00704A, #13B58A); -webkit-background-clip: text; background-clip: text; color: transparent; }
+html.vivo .close blockquote em { background: linear-gradient(100deg, #00704A, #13B58A); -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: .06em; }
+
+/* ------------------------------------------------------------ barra de progreso y dock */
+html.vivo .reveal .progress span { background-image: linear-gradient(90deg, #00704A, #13B58A, #2C9CC9, #5B45B0, #D2532F, #F2A541); }
+html.vivo .dock { background: rgba(255, 255, 255, .55); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+html.vivo .dock button { background: rgba(255, 255, 255, .6); }
+html.vivo #nav-tema { color: #5B45B0; }
